@@ -6,19 +6,17 @@
 
 ---
 ## 1. Clone project
----
 ```
 git clone https://github.com/TrtxP/Socket-IO
 ```
 ---
 ## 2. Initialize modules Node.JS
----
 ```
 npm i 
 ```
 ---
 ## 3. Launch the project
----
 ```
 npm start
 ```
+---
