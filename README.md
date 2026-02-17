@@ -20,8 +20,6 @@ npm i
 npm start
 ```
 ---
-
----
 ## Issues
 ---
 ### 1. Loaded non-working chat server before authorization
