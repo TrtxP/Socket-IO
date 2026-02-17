@@ -1,2 +1,5 @@
 # modules of Node.js 
 node_modules
+# JSON data of initialized Node.JS project
+package.json
+package-lock.json
