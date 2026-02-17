@@ -1,0 +1,51 @@
+#chat-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#sidebar {
+    width: 800px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-right: 1px solid #ddd;
+}
+
+#room-list {
+    list-style-type: none;
+}
+
+#chat-area {
+    flex: 1;
+    padding: 20px;
+}
+
+.room {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 4px 0;
+}
+
+.room:hover {
+    background-color: #e9e9e9;
+}
+
+.room.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#create-room {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 12px;
+    align-items: center;
+}
+
+#new-room {
+    flex: 1;
+    font-size: 16px;
+    width: 100%;
+    padding: 8px;
+}

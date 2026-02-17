@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/set-username.css" />
+    <link rel="stylesheet" href="/css/chat-rooms.css" />
+</head>
+<body>
+    <h1>Simple Chat</h1>
+    <%- include('html-children/chat-rooms') -%>
+    <script src="./socket.io/socket.io.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script type="module" src="/js/set-username.js"></script>
+    <script type="module" src="/js/chat-rooms.js"></script>
+</body>
+</html>
