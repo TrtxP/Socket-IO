@@ -20,3 +20,11 @@ npm i
 npm start
 ```
 ---
+
+---
+## Issues
+---
+### 1. Loaded non-working chat server before authorization
+### 2. After toggle chat saved url with chat names
+### 3. Chat history isn't saved
+---
