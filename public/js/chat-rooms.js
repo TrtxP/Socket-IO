@@ -28,7 +28,7 @@ roomList.addEventListener('click', (e) => {
 })
 
 function updateURL(room) {
-    const newUrl = window.location.origin + (room ? '/' + room : '/')
+    const newUrl = window.location.origin + (room ? '/chat' + `/${room}` : '/chat')
     window.history.pushState({ path: newUrl }, '', newUrl)
 }
 

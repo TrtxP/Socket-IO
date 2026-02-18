@@ -22,28 +22,34 @@ app.set('view engine', 'ejs')
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+const mainPath = path.join(__dirname, 'public', 'main')
 const registrationPath = path.join(__dirname, 'registration')
 const authorizationPath = path.join(__dirname, 'authorization')
 
-app.use('/registration', express.static(registrationPath))
-app.use('/authorization', express.static(authorizationPath))
+app.use('/', express.static(mainPath))
+app.use('/register', express.static(registrationPath))
+app.use('/login', express.static(authorizationPath))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 
 app.get('/', (req, res) => {
+    res.sendFile(path.join(mainPath, 'main.html'))
+})
+
+app.get('/chat', (req, res) => {
     res.render('index')
 })
 
-app.get('/registration', (req, res) => {
+app.get('/register', (req, res) => {
     res.sendFile(path.join(registrationPath, 'index.html'))
 })
 
-app.get('/authorization', (req, res) => {
+app.get('/login', (req, res) => {
     res.sendFile(path.join(authorizationPath, 'index.html'))
 })
 
-app.post('/registration', async (req, res) => {
+app.post('/register', async (req, res) => {
     const { username, password, repeatPass } = req.body
 
     if (password !== repeatPass) {
@@ -70,7 +76,7 @@ app.post('/registration', async (req, res) => {
     }
 })
 
-app.post('/authorization', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body
 
     try {
@@ -110,13 +116,13 @@ app.post('/authorization', async (req, res) => {
 
 const rooms = new Set(['general', 'random'])
 
-app.get('/:room', (req, res) => {
+app.get('/chat/:room', (req, res) => {
     const room = req.params.room
 
     if (rooms.has(room)) {
         res.render('index')
     } else {
-        return res.redirect('/')
+        return res.redirect('/chat')
     }
 })
 
