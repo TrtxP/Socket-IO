@@ -4,7 +4,6 @@
 
 ## Features
 
----
 ### 1. Adding chat rooms
 ### 2. Switching the chats
 ### 3. Log in and Sign up forms 
@@ -16,9 +15,6 @@
 ### 5. Hashing user passwords
 ###    via using bcrypt module
 ---
-
----
-
 ## Project launching
 
 ---
