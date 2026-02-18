@@ -26,7 +26,7 @@ const mainPath = path.join(__dirname, 'public', 'main')
 const registrationPath = path.join(__dirname, 'registration')
 const authorizationPath = path.join(__dirname, 'authorization')
 
-app.use('/', express.static(mainPath))
+// app.use('/', express.static(mainPath))
 app.use('/register', express.static(registrationPath))
 app.use('/login', express.static(authorizationPath))
 app.use(express.urlencoded({ extended: true }))
