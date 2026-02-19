@@ -15,6 +15,10 @@
 ### 5. Hashing user passwords
 ###    via using bcrypt module.
 ---
+## New features
+
+### 1. Added username validation in the registration form.
+---
 ## Project launching
 
 ---

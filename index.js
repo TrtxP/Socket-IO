@@ -52,6 +52,14 @@ app.get('/login', (req, res) => {
 app.post('/register', async (req, res) => {
     const { username, password, repeatPass } = req.body
 
+    const dbQuery = await db.query(`SELECT * FROM users WHERE username = $1`, [username])
+
+    const user = dbQuery.rows[0]
+
+    if (username === user.username) {
+        return res.status(401).send(`User ${username} is already existed`)
+    }
+
     if (password !== repeatPass) {
         return res.status(401).send("The passwords don't match")
     }
