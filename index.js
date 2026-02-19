@@ -23,10 +23,10 @@ app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 
 const mainPath = path.join(__dirname, 'public', 'main')
-const registrationPath = path.join(__dirname, 'registration')
-const authorizationPath = path.join(__dirname, 'authorization')
+const registrationPath = path.join(__dirname, 'public', 'registration')
+const authorizationPath = path.join(__dirname, 'public', 'authorization')
 
-// app.use('/', express.static(mainPath))
+app.use('/', express.static(mainPath))
 app.use('/register', express.static(registrationPath))
 app.use('/login', express.static(authorizationPath))
 app.use(express.urlencoded({ extended: true }))
@@ -66,8 +66,8 @@ app.post('/register', async (req, res) => {
             VALUES ($1, $2) 
             RETURNING *`, 
             [username, hashedPass])
-        
-        res.send('Success')
+
+        res.redirect('/')
 
         io.emit('user_registered', { username: result.rows[0].username })
     } catch (err) {
