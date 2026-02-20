@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authorization</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <title>Log in</title>
+    <link rel="stylesheet" href="./css/login-form.css">
 </head>
 <body>
     <div class="background"></div>
     <div class="container">
-        <h2>Authorization</h2>
+        <h2>Log in</h2>
         <form id="login-form" action="/login" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
@@ -28,10 +28,12 @@
         <hr>
         <div class="oauth-buttons">
             <!-- <button id="google-login">Войти через Google</button> -->
-            <button id="register">Sign up</button>
+            <button id="register" data-url="/register">Sign up</button>
+            <span class="reset-pass">If you don't remember your password, you can reset password here</span>
+            <button id="resetPass" data-url="/reset-pass">Reset password</button>
             <!-- <button id="other-login">Другие способы входа</button> -->
         </div>
     </div>
-    <script src="./js/scripts.js"></script>
+    <script src="./js/login.js"></script>
 </body>
 </html>

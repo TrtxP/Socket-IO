@@ -23,8 +23,8 @@ app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 
 const mainPath = path.join(__dirname, 'public', 'main')
-const registrationPath = path.join(__dirname, 'public', 'registration')
-const authorizationPath = path.join(__dirname, 'public', 'authorization')
+const registrationPath = path.join(__dirname, 'public', 'register')
+const authorizationPath = path.join(__dirname, 'public', 'login')
 
 app.use('/', express.static(mainPath))
 app.use('/register', express.static(registrationPath))
@@ -42,22 +42,29 @@ app.get('/chat', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(registrationPath, 'index.html'))
+    res.sendFile(path.join(registrationPath, 'register.html'))
 })
 
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(authorizationPath, 'index.html'))
+    res.sendFile(path.join(authorizationPath, 'login.html'))
 })
 
 app.post('/register', async (req, res) => {
     const { username, password, repeatPass } = req.body
 
-    const dbQuery = await db.query(`SELECT * FROM users WHERE username = $1`, [username])
+    if (!username || !password || !repeatPass) {
+        return res.status(401).send("Data isn't filled in")
+    }
 
+    const dbQuery = await db.query(`
+        SELECT * FROM users
+        WHERE username = $1`, 
+        [username])
+        
     const user = dbQuery.rows[0]
 
-    if (username === user.username) {
-        return res.status(401).send(`User ${username} is already existed`)
+    if (user.username) {
+        return res.status(401).send(`User ${user.username} is already existed`)
     }
 
     if (password !== repeatPass) {
@@ -78,6 +85,7 @@ app.post('/register', async (req, res) => {
         res.redirect('/')
 
         io.emit('user_registered', { username: result.rows[0].username })
+
     } catch (err) {
         console.log(`Error DB: ${err.message}`)
         res.status(500).send('Error registration')
@@ -86,6 +94,10 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
+
+    if (!username || !password) {
+        return res.status(401).send("Data isn't filled in")
+    }
 
     try {
         const result = await db.query(`
