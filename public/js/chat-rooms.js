@@ -4,25 +4,31 @@ const roomList = document.getElementById('room-list')
 const newRoomInput = document.getElementById('new-room')
 const createRoomBtn = document.getElementById('create-room-btn')
 
+export function switchRoom(roomName, element) {
+    document.querySelectorAll('.room').forEach(r => r.classList.remove('active'))
+
+    if (roomName) {
+        element.classList.add('active')
+        socket.emit('join room', roomName)
+        updateURL(roomName)
+    } else {
+        updateURL('')
+    }
+}
+
 roomList.addEventListener('click', (e) => {
     const targetRoom = e.target
 
     if (targetRoom.classList.contains('room')) {
-        const currentActive = document.querySelector('.room.active')
+        const roomName = targetRoom.dataset.room
 
-        if (currentActive && currentActive !== targetRoom) {
-            currentActive.classList.remove('active')
-        }
-
-        const isActiveNow = targetRoom.classList.toggle('active')
-
-        if (isActiveNow) {
-            const roomName = targetRoom.dataset.room
-            socket.emit('join room', roomName)
-            updateURL(roomName)  
-        } else {
-            socket.emit('left room', targetRoom.dataset.room)
+        if (targetRoom.classList.contains('active')) {
+            targetRoom.classList.remove('active')
+            socket.emit('left room', roomName)
             updateURL('')
+        } else {
+            targetRoom.classList.add('active')
+            switchRoom(roomName, targetRoom)
         }
     }
 })
