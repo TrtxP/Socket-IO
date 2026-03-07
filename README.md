@@ -37,13 +37,3 @@ npm i
 npm start
 ```
 ---
-## Issues
----
-### 1. Loaded non-working chat server after switching of chats;
-### 2. After toggle chat saved url with chat names;
-### 3. Chat history isn't saved.
----
-## Fixed issues
----
-### 1. Added main page for authorization and registration, and added an opportunity to go to chat server after it.
----
