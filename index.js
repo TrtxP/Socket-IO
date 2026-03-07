@@ -139,11 +139,11 @@ const rooms = new Set(['general', 'random'])
 app.get('/chat/:room', (req, res) => {
     const room = req.params.room
 
-    if (rooms.has(room)) {
-        res.render('index')
-    } else {
+    if (room && !rooms.has(room)) {
         return res.redirect('/chat')
     }
+
+    res.render('index', { currentRoom: room || 'general' })
 })
 
 io.use((socket, next) => {
