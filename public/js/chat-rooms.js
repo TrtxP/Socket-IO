@@ -59,22 +59,6 @@ socket.on('init rooms', (allRooms) => {
 
 socket.on('room created', (roomName) => renderRoom(roomName))
 
-socket.on('joined room', (room) => {
-    const item = document.createElement('li')
-    item.className = 'system-message'
-    item.textContent = `You joined ${room}`
-    messages.appendChild(item)
-    messages.scrollTop = messages.scrollHeight
-})
-
-socket.on('left room', (room) => {
-    const item = document.createElement('li')
-    item.className = 'system-message'
-    item.textContent = `You left ${room}`
-    messages.appendChild(item)
-    messages.innerHTML = ''
-})
-
 socket.on('room message', (data) => {
     const item = document.createElement('li')
     item.className = 'system-message'

@@ -171,22 +171,37 @@ io.on('connection', (socket) => {
 
     socket.emit('init rooms', Array.from(rooms))
 
-    socket.on('join room', (room) => {
+    socket.on('join room', async (room) => {
         socket.rooms.forEach(r => {
             if (r !== socket.id) {
                 socket.leave(r)
-                socket.emit('left room', r)
             }
         })
 
         socket.join(room)
-        socket.emit('joined room', room)
+        
+        try {
+            const result = await db.query(`
+                SELECT * FROM (
+                    SELECT username, message, created_at
+                    FROM messages
+                    WHERE room = $1
+                    ORDER BY created_at DESC
+                    LIMIT 50
+                    ) AS recent_messages 
+                    ORDER BY created_at ASC;`, [room])
+                
+            socket.emit('load history', result.rows)
 
-        // socket.to(room).emit('room message', {
-        //     username: 'System',
-        //     message: `${socket.username} has joined the room`,
-        //     timestamp: new Date().toISOString()
-        // })
+            socket.to(room).emit('room message', {
+                username: 'System',
+                message: `${socket.username} join the room`,
+                timestamp: new Date().toISOString()
+            })
+
+        } catch (error) {
+            console.error('Error joining room:', error)
+        }
     })
 
     socket.on('create room', (roomName) => {
@@ -196,24 +211,25 @@ io.on('connection', (socket) => {
         }
     })
 
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', async (msg) => {
         const room = Array.from(socket.rooms).find(r => r !== socket.id) || 'general'
-        io.to(room).emit('chat message', {
-            username: socket.user,
-            message: msg,
-            timestamp: new Date().toISOString(),
-            room: room
-        })
+        const user = socket.user
+        try {
+            await db.query(`
+                INSERT INTO messages (room, username, message)
+                VALUES ($1, $2, $3)`,
+                [room, user, msg])
+            
+            io.to(room).emit('chat message', {
+                username: socket.user,
+                message: msg,
+                timestamp: new Date().toISOString(),
+                room: room
+            })
+        } catch (error) {
+            console.error('Error sending message:', error)
+        }
     })
-
-    // socket.on('set username', (username) => {
-    //     let oldUsername = socket.username
-    //     socket.username = username || 'Anonymous'
-    //     io.emit('user joined', {
-    //         oldUsername: oldUsername,
-    //         newUsername: socket.username
-    //     })
-    // })
 
     socket.on('disconnect', () => {
         console.log('A user disconnected')
