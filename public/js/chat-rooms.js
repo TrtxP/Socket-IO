@@ -1,4 +1,5 @@
 import { socket, messages } from "./script.js"
+import { checkUrlAndJoin } from "./load.js"
 
 const roomList = document.getElementById('room-list')
 const newRoomInput = document.getElementById('new-room')
@@ -26,6 +27,7 @@ roomList.addEventListener('click', (e) => {
             targetRoom.classList.remove('active')
             socket.emit('left room', roomName)
             updateURL('')
+            messages.innerHTML = ''
         } else {
             targetRoom.classList.add('active')
             switchRoom(roomName, targetRoom)
@@ -61,6 +63,8 @@ socket.on('init rooms', (allRooms) => {
     allRooms.forEach((roomName) => {
         renderRoom(roomName)
     })
+
+    checkUrlAndJoin()
 })
 
 socket.on('room created', (roomName) => renderRoom(roomName))
