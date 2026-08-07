@@ -48,7 +48,32 @@ cd Socket-IO
 npm install
 ```
 
-### 3. Run the application
+### 3. Configure environment variables
+
+Create a `.env` file from the existing `.env.example` file and update the values for your local setup:
+
+```bash
+cp .env.example .env
+```
+
+Example `.env` configuration:
+
+```env
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=socketio_chat
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+JWT_SECRET=your_jwt_secret_key
+SESSION_SECRET=your_session_secret
+```
+
+Make sure PostgreSQL is running and the credentials match your local database configuration.
+
+### 4. Run the application
 
 ```bash
 npm start
