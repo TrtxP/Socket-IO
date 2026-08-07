@@ -1,5 +1,5 @@
 // Typing indicators functionality
-module.exports = (io) => {
+export default function typingEvents(io) {
   // Map to track typing users per room
   const typingUsers = new Map(); // room -> Set of usernames
 
@@ -52,4 +52,4 @@ module.exports = (io) => {
 
   // Optional: Expose typingUsers for debugging/admin purposes
   return { typingUsers };
-};
+}
