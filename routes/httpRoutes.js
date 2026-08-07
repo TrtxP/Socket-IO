@@ -7,7 +7,7 @@ const { rooms } = require('../utils/rooms')
 module.exports = (app, io) => {
   // GET routes
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'main', 'main.html'))
+    res.sendFile(path.join(__dirname, '../', 'public', 'main', 'main.html'))
   })
 
   app.get('/chat', (req, res) => {
@@ -15,11 +15,11 @@ module.exports = (app, io) => {
   })
 
   app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'register', 'register.html'))
+    res.sendFile(path.join(__dirname, '../', 'public', 'register', 'register.html'))
   })
 
   app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login', 'login.html'))
+    res.sendFile(path.join(__dirname, '../', 'public', 'login', 'login.html'))
   })
 
   // POST routes
@@ -37,7 +37,7 @@ module.exports = (app, io) => {
 
     const user = dbQuery.rows[0]
 
-    if (user.username) {
+    if (user) {
       return res.status(401).send(`User ${user.username} is already existed`)
     }
 
