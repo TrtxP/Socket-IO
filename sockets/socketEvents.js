@@ -2,8 +2,14 @@ const cookie = require('cookie')
 const jwt = require('jsonwebtoken')
 const db = require('../database/db')
 const { rooms } = require('../utils/rooms')
+const typingEvents = require('./typingEvents')
+const userPresence = require('./userPresence')
 
 module.exports = (io) => {
+  // Initialize typing events
+  const typingState = typingEvents(io)
+  // Initialize user presence tracking
+  const presenceState = userPresence(io)
   // Authentication middleware for socket.io
   io.use((socket, next) => {
     const cookies = cookie.parse(socket.handshake.headers.cookie || '')
@@ -33,38 +39,9 @@ module.exports = (io) => {
     socket.emit('init rooms', Array.from(rooms))
 
     socket.on('join room', async (room) => {
-      // Leave all rooms except the socket's own ID
-      socket.rooms.forEach(r => {
-        if (r !== socket.id) {
-          socket.leave(r)
-        }
-      })
-
-      socket.join(room)
-
-      try {
-        const result = await db.query(`
-            SELECT * FROM (
-                SELECT username, message, created_at
-                FROM messages
-                WHERE room = $1
-                ORDER BY created_at DESC
-                LIMIT 50
-                ) AS recent_messages
-                ORDER BY created_at ASC;`, [room])
-
-        socket.emit('load history', result.rows)
-
-        // Notify the room that the user has joined
-        socket.to(room).emit('room message', {
-          username: 'System',
-          message: `${socket.user} join the room`,
-          timestamp: new Date().toISOString()
-        })
-
-      } catch (error) {
-        console.error('Error joining room:', error)
-      }
+      // Let userPresence handle the room joining logic
+      // Emit the join room event to userPresence module
+      socket.emit('join room', room)
     })
 
     socket.on('create room', (roomName) => {
@@ -72,6 +49,8 @@ module.exports = (io) => {
         rooms.add(roomName)
         io.emit('room created', roomName)
       }
+      // Auto-join the created room (handled by userPresence)
+      socket.emit('join room', roomName)
     })
 
     socket.on('chat message', async (msg) => {

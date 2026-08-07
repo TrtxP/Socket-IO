@@ -48,3 +48,39 @@ button {
 button:hover {
     background: #45a049;
 }
+
+/* Typing indicators */
+.typing-indicators {
+    margin-top: 10px;
+    padding: 8px 16px;
+    min-height: 20px;
+    font-style: italic;
+    color: #666;
+}
+
+.typing-indicators .typing-user {
+    display: inline-block;
+    margin-right: 8px;
+    background-color: #e9f7ef;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+}
+
+/* User list */
+.user-list {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+.user-list em {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.user-list strong {
+    color: #495057;
+}
