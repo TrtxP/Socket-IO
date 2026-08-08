@@ -162,34 +162,44 @@ socket.on('user list update', (data) => {
     // Update the room header or create a user list element
     let userListElement = document.getElementById(`user-list-${room}`)
     if (!userListElement) {
-      // Create user list element if it doesn't exist
-      userListElement = document.createElement('div')
-      userListElement.id = `user-list-${room}`
-      userListElement.className = 'user-list'
+        // Create user list element if it doesn't exist
+        userListElement = document.createElement('div')
+        userListElement.id = `user-list-${room}`
+        userListElement.className = 'user-list'
 
-      // Insert it after the room header or at the top of messages
-      const roomHeader = document.querySelector(`[data-room="${room}"]`)
-      if (roomHeader && roomHeader.parentNode) {
-        roomHeader.parentNode.insertBefore(userListElement, roomHeader.nextSibling)
-      } else {
-        // Fallback: insert before messages
-        messages.parentNode.insertBefore(userListElement, messages)
-      }
+        // Insert it after the room header or at the top of messages
+        const roomHeader = document.querySelector(`[data-room="${room}"]`)
+        if (roomHeader && roomHeader.parentNode) {
+            roomHeader.parentNode.insertBefore(userListElement, roomHeader.nextSibling)
+        } else {
+            // Fallback: insert before messages
+            messages.parentNode.insertBefore(userListElement, messages)
+        }
     }
 
     // Update the user list content
     if (users.length === 0) {
-      userListElement.innerHTML = '<em>No users online</em>'
+        userListElement.innerHTML = '<em>No users online</em>'
     } else if (users.length === 1) {
-      userListElement.innerHTML = `<strong>${users[0]}</strong> (you)${users[0] === socket.user ? ' (you)' : ''}`
+        userListElement.innerHTML = `<strong>${users[0]}</strong> (you)${users[0] === socket.user ? ' (you)' : ''}`
     } else {
-      const currentUserIndex = users.indexOf(socket.user)
-      const userList = users.map((user, index) => {
-        if (index === currentUserIndex) {
-          return `<strong>${user}</strong> (you)`
-        }
-        return `<strong>${user}</strong>`
-      }).join(', ')
-      userListElement.innerHTML = `Online: ${userList}`
+        const currentUserIndex = users.indexOf(socket.user)
+        const userList = users.map((user, index) => {
+            if (index === currentUserIndex) {
+                return `<strong>${user}</strong> (you)`
+            }
+            return `<strong>${user}</strong>`
+        }).join(', ')
+        userListElement.innerHTML = `Online: ${userList}`
     }
+})
+
+socket.on('load history', (history) => {
+    messages.innerHTML = ''
+    history.forEach((msg) => {
+        const item = document.createElement('li')
+        item.innerHTML = `<strong>${msg.username}:</strong> ${msg.message}`
+        messages.appendChild(item)
+    })
+    messages.scrollTop = messages.scrollHeight
 })
