@@ -16,11 +16,18 @@ const rootPath = join(__dirname);
   imports: [
     ConfigModule,
     DatabaseModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(rootPath, 'public'),
-      serveRoot: '/',
-      exclude: ['/api*']
-    }),
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, 'css'),
+        serveRoot: '/css',
+        exclude: ['/api*']
+      },
+      {
+        rootPath: join(__dirname, 'js'),
+        serveRoot: '/js',
+        exclude: ['/api*']
+      }
+    ),
     AuthModule,
     UsersModule,
     MessagesModule,

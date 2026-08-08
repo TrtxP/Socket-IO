@@ -2,7 +2,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "webpack": false,
-    "typescript": false
+    "assets": [
+      "**/*.ejs",
+      "**/*.html",
+      "**/*.css",
+      "js/**/*.js"
+    ],
+    "watchAssets": true
   }
 }

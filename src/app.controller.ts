@@ -1,10 +1,28 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import type { Response } from 'express';
+import { Controller, Get, Res } from "@nestjs/common";
+import type { FastifyReply } from "fastify";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 @Controller()
 export class AppController {
   @Get()
-  async getIndex(@Res() res: Response) {
-    res.sendFile('main.html', { root: './public/main' });
+  async getIndex(@Res() res: FastifyReply) {
+    const path = join(__dirname, "main", "main.html");
+    const html = await readFile(path, "utf8");
+    res.type("text/html").send(html);
+  }
+
+  @Get("/register")
+  async getRegister(@Res() res: FastifyReply) {
+    const path = join(__dirname, "register", "register.html");
+    const html = await readFile(path, "utf8");
+    res.type("text/html").send(html);
+  }
+
+  @Get("/login")
+  async getLogin(@Res() res: FastifyReply) {
+    const path = join(__dirname, "login", "login.html");
+    const html = await readFile(path, "utf8");
+    res.type("text/html").send(html);
   }
 }

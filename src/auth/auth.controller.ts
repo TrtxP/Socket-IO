@@ -1,13 +1,13 @@
 import { Controller, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import type { Response } from 'express';
+import type { FastifyReply } from 'fastify';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
-  async register(@Body() body: any, @Res() res: Response) {
+  async register(@Body() body: any, @Res() res: FastifyReply) {
     const { username, password, repeatPass } = body;
 
     // Validation
@@ -33,7 +33,7 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() body: any, @Res() res: Response) {
+  async login(@Body() body: any, @Res() res: FastifyReply) {
     const { username, password } = body;
 
     // Validation
@@ -44,7 +44,7 @@ export class AuthController {
     try {
       const { token } = await this.authService.login(username, password);
       // Set HTTP-only cookie
-      res.cookie('token', token, { httpOnly: true });
+      res.setCookie('token', token, { httpOnly: true });
       res.redirect('/');
     } catch (err: any) {
       if (err.message === 'Invalid credentials') {
