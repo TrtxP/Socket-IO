@@ -21,11 +21,7 @@ export default class SocketIoService {
       const { rooms } = require('../utils/rooms');
       socket.emit('init rooms', Array.from(rooms));
 
-      socket.on('join room', async (room: string) => {
-        // Let userPresence handle the room joining logic
-        // Emit the join room event to userPresence module
-        socket.emit('join room', room);
-      });
+      // 'join room' is handled by user.presence.service
 
       socket.on('create room', (roomName) => {
         if (!rooms.has(roomName)) {

@@ -69,7 +69,23 @@ socket.on('init rooms', (allRooms) => {
         renderRoom(roomName)
     })
 
-    checkUrlAndJoin()
+    // Check if URL specifies a particular room
+    const pathParts = window.location.pathname.split('/')
+    const roomFromUrl = pathParts[pathParts.length - 1]
+
+    if (roomFromUrl && roomFromUrl !== 'chat' && roomFromUrl !== '') {
+        // Join the room specified in the URL
+        const roomElement = document.querySelector(`[data-room="${roomFromUrl}"]`)
+        if (roomElement) {
+            switchRoom(roomFromUrl, roomElement)
+        }
+    } else {
+        // Auto-join the general room by default
+        const generalRoom = document.querySelector('[data-room="general"]')
+        if (generalRoom) {
+            switchRoom('general', generalRoom)
+        }
+    }
 })
 
 // Handle typing updates from server
