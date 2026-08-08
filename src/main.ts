@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import fastifyCookie from 'fastify-cookie';
-import fastifyFormbody from '@fastify/formbody';
 import { SocketAuthMiddleware } from './sockets/socket.auth.middleware';
 import SocketIoService from './sockets/socket.io.service';
 import { join } from 'path';
@@ -15,9 +14,6 @@ async function bootstrap() {
 
   // Register fastify-cookie
   app.register(fastifyCookie);
-
-  // Register fastify-formbody to parse form data
-  app.register(fastifyFormbody);
 
   // Serve static assets via Fastify
   app.useStaticAssets({

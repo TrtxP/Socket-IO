@@ -1,19 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // const googleLoginButton = document.getElementById('google-login');
-    // googleLoginButton.addEventListener('click', () => {
-    //     window.location.href = 'https://accounts.google.com/v3/signin/identifier?authuser=0&continue=https%3A%2F%2Fmyaccount.google.com%2F&ec=GAlAwAE&hl=ru&service=accountsettings&flowName=GlifWebSignIn&flowEntry=AddSession&dsh=S-2112924128%3A1736940200697582&ddm=1';
-    // });
+    // Handle login form submission via fetch/JSON
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    const registrationButton = document.getElementById('register')
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                const text = await response.text();
+                alert(text || 'Login failed');
+            }
+        } catch (err) {
+            alert('Network error');
+        }
+    });
+
+    const registrationButton = document.getElementById('register');
     registrationButton.addEventListener('click', (e) => {
-        const targetPath = e.target
-        const registerURL = targetPath.dataset.url
-        window.location.href = registerURL
-    })
-
-    // const otherLoginButton = document.getElementById('other-login');
-    // otherLoginButton.addEventListener('click', () => {
-    //     alert('Другие способы входа будут добавлены позже!');
-    // });
-})
+        const targetPath = e.target;
+        const registerURL = targetPath.dataset.url;
+        window.location.href = registerURL;
+    });
+});

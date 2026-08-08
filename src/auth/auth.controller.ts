@@ -12,23 +12,22 @@ export class AuthController {
 
     // Validation
     if (!username || !password || !repeatPass) {
-      return res.status(401).send("Data isn't filled in");
+      return res.status(400).send("Data isn't filled in");
     }
 
     if (password !== repeatPass) {
-      return res.status(401).send("The passwords don't match");
+      return res.status(400).send("The passwords don't match");
     }
 
     try {
       await this.authService.register(username, password);
-      // Redirect to home page after successful registration
-      res.redirect('/');
+      return res.status(200).send({ message: 'Registration successful' });
     } catch (err: any) {
       if (err.message === 'User already exists') {
-        return res.status(401).send(`User ${username} is already existed`);
+        return res.status(409).send(`User ${username} already exists`);
       }
       console.log(`Error DB: ${err.message}`);
-      res.status(500).send('Error registration');
+      return res.status(500).send('Error registration');
     }
   }
 
@@ -38,19 +37,20 @@ export class AuthController {
 
     // Validation
     if (!username || !password) {
-      return res.status(401).send("Data isn't filled in");
+      return res.status(400).send("Data isn't filled in");
     }
 
     try {
       const { token } = await this.authService.login(username, password);
       // Set HTTP-only cookie
-      res.setCookie('token', token, { httpOnly: true });
-      res.redirect('/');
+      res.setCookie('token', token, { httpOnly: true, path: '/' });
+      return res.status(200).send({ message: 'Login successful' });
     } catch (err: any) {
       if (err.message === 'Invalid credentials') {
         return res.status(401).send('Invalid password');
       }
-      res.status(500).send('Error authorization');
+      console.log(`Error auth: ${err.message}`);
+      return res.status(500).send('Error authorization');
     }
   }
 }
