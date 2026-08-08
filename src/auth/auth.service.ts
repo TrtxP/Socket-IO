@@ -35,7 +35,6 @@ export class AuthService {
         id: user.id,
         username: user.username
       },
-      { expiresIn: '24h' },
     );
 
     return {

@@ -1,10 +1,13 @@
+import * as dotenv from 'dotenv';
+import { join } from 'path';
+dotenv.config({ path: join(__dirname, '..', '.env') });
+
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import fastifyCookie from 'fastify-cookie';
 import { SocketAuthMiddleware } from './sockets/socket.auth.middleware';
 import SocketIoService from './sockets/socket.io.service';
-import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
