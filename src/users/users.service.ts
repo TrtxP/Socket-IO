@@ -1,8 +1,10 @@
 import bcrypt from 'bcrypt';
 import { DatabaseService } from '../database/db.service';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UsersService {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private databaseService: DatabaseService) { }
 
   async findByUsername(username: string) {
     const result = await this.databaseService.query(

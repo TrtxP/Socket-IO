@@ -1,9 +1,11 @@
 import { Pool } from 'pg';
 import { join } from 'path';
 import * as dotenv from 'dotenv';
+import { Injectable } from '@nestjs/common';
 
 dotenv.config({ path: join(__dirname, '../../.env') });
 
+@Injectable()
 export class DatabaseService {
   private pool: Pool;
 
