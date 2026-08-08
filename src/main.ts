@@ -2,8 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import fastifyCookie from 'fastify-cookie';
+import fastifyFormbody from '@fastify/formbody';
 import { SocketAuthMiddleware } from './sockets/socket.auth.middleware';
 import SocketIoService from './sockets/socket.io.service';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,6 +15,30 @@ async function bootstrap() {
 
   // Register fastify-cookie
   app.register(fastifyCookie);
+
+  // Register fastify-formbody to parse form data
+  app.register(fastifyFormbody);
+
+  // Serve static assets via Fastify
+  app.useStaticAssets({
+    root: join(__dirname, 'css'),
+    prefix: '/css/',
+  });
+  app.useStaticAssets({
+    root: join(__dirname, 'js'),
+    prefix: '/js/',
+    decorateReply: false,
+  });
+  app.useStaticAssets({
+    root: join(__dirname, 'login'),
+    prefix: '/login/',
+    decorateReply: false,
+  });
+  app.useStaticAssets({
+    root: join(__dirname, 'register'),
+    prefix: '/register/',
+    decorateReply: false,
+  });
 
   await app.init();
 

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
+
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
@@ -16,18 +16,7 @@ const rootPath = join(__dirname);
   imports: [
     ConfigModule,
     DatabaseModule,
-    ServeStaticModule.forRoot(
-      {
-        rootPath: join(__dirname, 'css'),
-        serveRoot: '/css',
-        exclude: ['/api*']
-      },
-      {
-        rootPath: join(__dirname, 'js'),
-        serveRoot: '/js',
-        exclude: ['/api*']
-      }
-    ),
+
     AuthModule,
     UsersModule,
     MessagesModule,

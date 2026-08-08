@@ -6,7 +6,11 @@
       "**/*.ejs",
       "**/*.html",
       "**/*.css",
-      "js/**/*.js"
+      "**/*.jpg",
+      "**/*.png",
+      "js/**/*.js",
+      "login/**/*.js",
+      "register/**/*.js"
     ],
     "watchAssets": true
   }
