@@ -12,3 +12,8 @@ form.addEventListener('submit', (e) => {
         messageInput.value = ''
     }
 })
+
+socket.on('connect_error', (err) => {
+    console.error('Error websocket connection: ', err.message)
+    console.error('Error data: ', err.data)
+})

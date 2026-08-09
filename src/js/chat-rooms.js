@@ -193,13 +193,3 @@ socket.on('user list update', (data) => {
         userListElement.innerHTML = `Online: ${userList}`
     }
 })
-
-socket.on('load history', (history) => {
-    messages.innerHTML = ''
-    history.forEach((msg) => {
-        const item = document.createElement('li')
-        item.innerHTML = `<strong>${msg.username}:</strong> ${msg.message}`
-        messages.appendChild(item)
-    })
-    messages.scrollTop = messages.scrollHeight
-})
