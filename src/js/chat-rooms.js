@@ -179,7 +179,7 @@ socket.on('user list update', (data) => {
     if (users.length === 0) {
         userListElement.innerHTML = '<em>No users online</em>'
     } else if (users.length === 1) {
-        userListElement.innerHTML = `<strong>${users[0]}</strong> (you)${users[0] === socket.user ? ' (you)' : ''}`
+        userListElement.innerHTML = `<strong>${users[0]}</strong>${users[0] === socket.user ? ' (you)' : ''}`
     } else {
         const currentUserIndex = users.indexOf(socket.user)
         const userList = users.map((user, index) => {
