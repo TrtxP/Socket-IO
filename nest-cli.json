@@ -8,10 +8,7 @@
       "**/*.css",
       "**/*.jpg",
       "**/*.png",
-      "js/**/*.js",
-      "login/**/*.js",
-      "register/**/*.js",
-      "reset-password/**/*.js"
+      "**/*.js"
     ],
     "watchAssets": true
   }
