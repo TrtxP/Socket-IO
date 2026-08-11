@@ -47,4 +47,8 @@ export class AuthService {
       }
     };
   }
+
+  async resetPassword(username: string, currentPassword: string, newPassword: string) {
+    return this.usersService.resetPassword(username, currentPassword, newPassword);
+  }
 }

@@ -39,4 +39,21 @@ export class UsersService {
 
     return user;
   }
+
+  async resetPassword(username: string, currentPassword: string, newPassword: string) {
+    const user = await this.validateUser(username, currentPassword);
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    await this.databaseService.query(
+      'UPDATE users SET password = $1 WHERE username = $2',
+      [hashedPassword, username]
+    );
+
+    return { username: user.username };
+  }
 }

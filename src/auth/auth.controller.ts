@@ -53,4 +53,25 @@ export class AuthController {
       return res.status(500).send('Error authorization');
     }
   }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: any, @Res() res: FastifyReply) {
+    const { username, currentPassword, newPassword } = body;
+
+    // Validation
+    if (!username || !currentPassword || !newPassword) {
+      return res.status(400).send("Data isn't filled in");
+    }
+
+    try {
+      await this.authService.resetPassword(username, currentPassword, newPassword);
+      return res.status(200).send({ message: 'Password reset successful' });
+    } catch (err: any) {
+      if (err.message === 'Invalid credentials') {
+        return res.status(401).send('Invalid username or current password');
+      }
+      console.log(`Error reset password: ${err.message}`);
+      return res.status(500).send('Error resetting password');
+    }
+  }
 }

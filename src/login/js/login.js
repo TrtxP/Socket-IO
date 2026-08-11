@@ -37,4 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const registerURL = targetPath.dataset.url;
         window.location.href = registerURL;
     });
-});
+
+    const resetPassButton = document.getElementById('resetPass');
+    resetPassButton.addEventListener('click', (e) => {
+        const targetPath = e.target;
+        const resetURL = targetPath.dataset.url;
+        window.location.href = resetURL;
+    });
+});

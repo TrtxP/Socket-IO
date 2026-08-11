@@ -33,4 +33,11 @@ export class AppController {
     const html = await readFile(path, "utf8");
     res.type("text/html").send(html);
   }
+
+  @Get("/reset-password")
+  async getResetPassword(@Res() res: FastifyReply) {
+    const path = join(__dirname, "reset-password", "reset-password.html");
+    const html = await readFile(path, "utf8");
+    res.type("text/html").send(html);
+  }
 }

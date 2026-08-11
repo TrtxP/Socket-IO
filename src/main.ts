@@ -38,6 +38,11 @@ async function bootstrap() {
     prefix: '/register/',
     decorateReply: false,
   });
+  app.useStaticAssets({
+    root: join(__dirname, 'reset-password'),
+    prefix: '/reset-password/',
+    decorateReply: false,
+  });
 
   await app.init();
 
