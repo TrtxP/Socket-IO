@@ -92,7 +92,7 @@ socket.on('init rooms', (allRooms) => {
 
 // Handle typing updates from server
 socket.on('typing update', (data) => {
-    const { room, users, currentUserTyping, username } = data
+    const { room, users, username } = data
 
     // Only show typing indicators for the current room
     if (room !== currentRoom) return
