@@ -14,6 +14,10 @@ form.addEventListener('submit', (e) => {
     }
 })
 
+socket.on('session', (data) => {
+    socket.user = data.username
+})
+
 // Log errors
 socket.on('connect_error', (err) => {
     console.error('Error websocket connection: ', err.message)

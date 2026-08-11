@@ -17,7 +17,7 @@ export class UserPresenceService {
   setupEvents(io: Server) {
     // Handle user presence events
     io.on('connection', (socket: Socket) => {
-      const username = (socket as any).user as string;
+      const username = (socket as any).user?.username || 'Unknown';
 
       // Initialize user's room tracking
       if (!this.userRooms.has(username)) {
@@ -79,7 +79,7 @@ export class UserPresenceService {
           // Notify the room that the user has joined
           socket.to(room).emit('room message', {
             username: 'System',
-            message: `${(socket as any).user} join the room`,
+            message: `${username} joined the room`,
             timestamp: new Date().toISOString()
           });
 
@@ -118,7 +118,7 @@ export class UserPresenceService {
               // Notify room that user left
               socket.to(room).emit('room message', {
                 username: 'System',
-                message: `${(socket as any).user} left the room`,
+                message: `${username} left the room`,
                 timestamp: new Date().toISOString()
               });
             }
@@ -130,7 +130,7 @@ export class UserPresenceService {
         this.userRooms.delete(username);
 
         // Emit global user left event (existing functionality)
-        io.emit('user left', { username: (socket as any).user });
+        io.emit('user left', { username });
       });
     });
   }

@@ -20,6 +20,7 @@ export default class SocketIoService {
 
       // Set the user property on the socket to the username for easy access
       socket.user = (socket as any).user.username as string;
+      socket.emit('session', { username: socket.user });
 
       // Send the list of rooms to the newly connected user
       // We'll get rooms from utils/rooms.js
