@@ -1,5 +1,4 @@
 import { socket, messages, currentRoom as _currentRoom } from "./script.js"
-import { checkUrlAndJoin } from "./load.js"
 
 const roomList = document.getElementById('room-list')
 const newRoomInput = document.getElementById('new-room')
