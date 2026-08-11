@@ -71,6 +71,6 @@ async function bootstrap() {
   const socketIoService = app.get(SocketIoService);
   socketIoService.setupEvents(io);
 
-  await app.listen(process.env.PORT || 5500);
+  await app.listen(process.env.PORT || 5500, '0.0.0.0');
 }
 bootstrap();
