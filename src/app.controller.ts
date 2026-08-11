@@ -25,4 +25,12 @@ export class AppController {
     const html = await readFile(path, "utf8");
     res.type("text/html").send(html);
   }
+
+  @Get("/logout")
+  async logout(@Res() res: FastifyReply) {
+    res.clearCookie("token", { path: '/' });
+    const path = join(__dirname, "logout", "logout.html");
+    const html = await readFile(path, "utf8");
+    res.type("text/html").send(html);
+  }
 }
