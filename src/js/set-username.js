@@ -16,9 +16,13 @@ socket.on('chat message', (data) => {
     messageOffset++
 })
 
-function displayMessage (data) {
+function displayMessage(data) {
+    const rawDate = data.created_at || data.timestamp
+    const timeString = new Date(rawDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+    const dateString = new Date(rawDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
     const item = document.createElement('li')
-    item.innerHTML = `<strong>${data.username}:</strong> ${data.message}`
+    item.innerHTML = `<span style="font-size: 0.8em; color: #888; margin-right: 8px;">[${dateString} - ${timeString}]</span>
+        <strong>${data.username}:</strong> ${data.message}`
     messages.appendChild(item)
     messages.scrollTop = messages.scrollHeight
 }
@@ -43,8 +47,12 @@ socket.on('load more history', (olderMessages) => {
     // Prepend older messages at the top
     const fragment = document.createDocumentFragment()
     olderMessages.forEach(msg => {
+        const rawDate = msg.created_at || msg.timestamp
+        const timeString = new Date(rawDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+        const dateString = new Date(rawDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
         const item = document.createElement('li')
-        item.innerHTML = `<strong>${msg.username}:</strong> ${msg.message}`
+        item.innerHTML = `<span style="font-size: 0.8em; color: #888; margin-right: 8px;">[${dateString} - ${timeString}]</span>
+        <strong>${msg.username}:</strong> ${msg.message}`
         fragment.appendChild(item)
     })
     messages.insertBefore(fragment, messages.firstChild)
