@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+.git
+.env
+.claude
+*.log
+npm-debug.log*
+.vscode
+.idea
+coverage
+.cache
+.temp

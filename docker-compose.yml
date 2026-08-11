@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: socket-io-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-0347}
+      POSTGRES_DB: ${DB_NAME:-DB}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: socket-io-app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5500}:5500"
+    environment:
+      PORT: 5500
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-super-secret-key-342}
+      DB_HOST: postgres
+      DB_USER: ${DB_USER:-postgres}
+      DB_PORT: 5432
+      DB_PASSWORD: ${DB_PASSWORD:-0347}
+      DB_NAME: ${DB_NAME:-DB}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
