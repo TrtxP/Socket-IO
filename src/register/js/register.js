@@ -1,3 +1,5 @@
+import { redirectTo } from "/js/redirect.js";
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Handle register form submission via fetch/JSON
@@ -32,10 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const toAuthorizationButton = document.getElementById('login');
-    toAuthorizationButton.addEventListener('click', (e) => {
-        const targetPath = e.target;
-        const loginURL = targetPath.dataset.url;
-        window.location.href = loginURL;
-    });
-});
+    redirectTo('login');
+    redirectTo('returnToMain');
+});

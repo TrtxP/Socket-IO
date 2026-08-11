@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in</title>
     <link rel="stylesheet" href="/login/css/login-form.css">
 </head>
+
 <body>
     <div class="background"></div>
     <div class="container">
@@ -27,13 +29,13 @@
         </form>
         <hr>
         <div class="oauth-buttons">
-            <!-- <button id="google-login">Войти через Google</button> -->
             <button id="register" data-url="/register">Sign up</button>
             <span class="reset-pass">If you don't remember your password, you can reset password here</span>
             <button id="resetPass" data-url="/reset-password">Reset password</button>
-            <!-- <button id="other-login">Другие способы входа</button> -->
+            <button id="returnToMain" data-url="/">Return to main</button>
         </div>
     </div>
-    <script src="/login/js/login.js"></script>
+    <script type="module" src="/login/js/login.js"></script>
 </body>
+
 </html>

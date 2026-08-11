@@ -1,3 +1,5 @@
+import { redirectTo } from "/js/redirect.js";
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const resetForm = document.getElementById('reset-password-form');
@@ -38,10 +40,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const toLoginButton = document.getElementById('login');
-    toLoginButton.addEventListener('click', (e) => {
-        const targetPath = e.target;
-        const loginURL = targetPath.dataset.url;
-        window.location.href = loginURL;
-    });
+    redirectTo('login');
 });
