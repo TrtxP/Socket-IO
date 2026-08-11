@@ -1,11 +1,10 @@
 #chat-container {
     display: flex;
-    max-width: 1200px;
     margin: 0 auto;
 }
 
 #sidebar {
-    width: 800px;
+    width: 100%;
     padding: 20px;
     background-color: #f5f5f5;
     border-right: 1px solid #ddd;
@@ -39,8 +38,9 @@
 #create-room {
     display: flex;
     margin-top: 20px;
-    margin-left: 12px;
+    padding: 0 20px;
     align-items: center;
+    gap: 5px;
 }
 
 #new-room {
