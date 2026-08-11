@@ -20,7 +20,9 @@ export class SocketAuthMiddleware {
         const decoded = this.jwtService.verify(token);
         (socket as any).user = decoded; // Attach decoded token (id, username)
         next();
-      } catch (error) {
+      } catch (error: any) {
+        console.log('SocketAuthMiddleware JWT Verify error:', error.name, error.message);
+        console.log('SECRET AT SOCKET MIDDLEWARE:', process.env.JWT_SECRET_KEY);
         next(new Error('Authentication error: Invalid token'));
       }
     } catch (error) {
