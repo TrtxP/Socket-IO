@@ -1,14 +1,19 @@
 import typingEvents from './typing.events.service';
-import userPresence from './user.presence.service';
+import { UserPresenceService } from './user.presence.service';
 import { MessagesService } from '../messages/messages.service';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export default class SocketIoService {
-  constructor(private messagesService: MessagesService) {}
+  constructor(
+    private messagesService: MessagesService,
+    private userPresenceService: UserPresenceService
+  ) {}
 
   setupEvents(io) {
     // Initialize sub-modules
     typingEvents(io);
-    userPresence(io);
+    this.userPresenceService.setupEvents(io);
 
     io.on('connection', (socket) => {
       console.log(`Authenticated user connected: ${(socket as any).user.username}`);
@@ -21,16 +26,7 @@ export default class SocketIoService {
       const { rooms } = require('../utils/rooms');
       socket.emit('init rooms', Array.from(rooms));
 
-      // 'join room' is handled by user.presence.service
-
-      socket.on('create room', (roomName) => {
-        if (!rooms.has(roomName)) {
-          rooms.add(roomName);
-          io.emit('room created', roomName);
-        }
-        // Auto-join the created room (handled by userPresence)
-        socket.emit('join room', roomName);
-      });
+      // 'join room' and 'create room' are handled by user.presence.service
 
       socket.on('chat message', async (msg) => {
         const room = (Array.from(socket.rooms).find(r => r !== socket.id) || 'general') as string;

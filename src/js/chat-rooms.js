@@ -1,4 +1,4 @@
-import { socket, messages } from "./script.js"
+import { socket, messages, currentRoom as _currentRoom } from "./script.js"
 import { checkUrlAndJoin } from "./load.js"
 
 const roomList = document.getElementById('room-list')
@@ -9,12 +9,15 @@ const typingIndicators = document.getElementById('typing-indicators')
 // Typing debounce timeout
 let typingTimeout = null
 const TYPING_DELAY = 500 // ms
+// Local reference to track current room (updated from script.js export)
+let currentRoom = _currentRoom
 
 export function switchRoom(roomName, element) {
     document.querySelectorAll('.room').forEach(r => r.classList.remove('active'))
 
     if (roomName) {
         element.classList.add('active')
+        currentRoom = roomName
         socket.emit('join room', roomName)
         updateURL(roomName)
     } else {
@@ -93,7 +96,6 @@ socket.on('typing update', (data) => {
     const { room, users, currentUserTyping, username } = data
 
     // Only show typing indicators for the current room
-    const currentRoom = Array.from(socket.rooms).find(r => r !== socket.id) || 'general'
     if (room !== currentRoom) return
 
     // Clear previous typing indicators
@@ -120,7 +122,6 @@ const messageInput = document.getElementById('input')
 if (messageInput) {
     messageInput.addEventListener('input', () => {
         // Emit typing start
-        const currentRoom = Array.from(socket.rooms).find(r => r !== socket.id) || 'general'
         socket.emit('typing', { room: currentRoom, isTyping: true })
 
         // Clear existing timeout
@@ -136,7 +137,6 @@ if (messageInput) {
 
     // Also handle stop typing when user stops typing for a bit
     messageInput.addEventListener('blur', () => {
-        const currentRoom = Array.from(socket.rooms).find(r => r !== socket.id) || 'general'
         socket.emit('typing', { room: currentRoom, isTyping: false })
     })
 }
@@ -156,7 +156,6 @@ socket.on('user list update', (data) => {
     const { room, users } = data
 
     // Only update user list for the current room
-    const currentRoom = Array.from(socket.rooms).find(r => r !== socket.id) || 'general'
     if (room !== currentRoom) return
 
     // Update the room header or create a user list element

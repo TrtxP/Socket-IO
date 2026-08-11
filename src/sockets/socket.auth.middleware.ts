@@ -1,4 +1,4 @@
-import cookie from 'cookie';
+import { parse } from 'cookie';
 import { JwtService } from '@nestjs/jwt';
 import type { Socket } from 'socket.io';
 import { Injectable } from '@nestjs/common';
@@ -8,8 +8,9 @@ export class SocketAuthMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
   async use(socket: Socket, next: (err?: any) => void) {
+    console.log('MIDDLEWARE CALLED');
     try {
-      const cookies = cookie.parse(socket.handshake.headers.cookie || '');
+      const cookies = parse(socket.handshake.headers.cookie || '');
       const token = cookies.token;
 
       if (!token) {
@@ -26,6 +27,7 @@ export class SocketAuthMiddleware {
         next(new Error('Authentication error: Invalid token'));
       }
     } catch (error) {
+      console.log('SocketAuthMiddleware Outer error:', error);
       next(new Error('Authentication error: Invalid token'));
     }
   }
