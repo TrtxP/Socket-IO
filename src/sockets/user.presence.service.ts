@@ -1,5 +1,6 @@
 // User presence tracking functionality
 import { DatabaseService } from '../database/db.service';
+import { MessagesService } from '../messages/messages.service';
 import { rooms } from '../utils/rooms';
 import type { Server, Socket } from 'socket.io';
 
@@ -12,7 +13,9 @@ export class UserPresenceService {
   // Map to track which rooms each user is in (for efficient cleanup)
   public userRooms = new Map<string, Set<string>>(); // username -> Set of rooms
 
-  constructor(private readonly databaseService: DatabaseService) { }
+  constructor(
+    private readonly messagesService: MessagesService
+  ) { }
 
   setupEvents(io: Server) {
     // Handle user presence events
@@ -63,18 +66,9 @@ export class UserPresenceService {
         });
 
         try {
-          const result = await this.databaseService.query(
-            `SELECT * FROM (
-              SELECT username, message, created_at
-              FROM messages
-              WHERE room = $1
-              ORDER BY created_at DESC
-              LIMIT 50
-            ) AS recent_messages
-            ORDER BY created_at ASC;`, [room]
-          );
+          const history = await this.messagesService.getMessageHistoryPaginated(room, 100, 0);
 
-          socket.emit('load history', result.rows);
+          socket.emit('load history', history);
 
           // Notify the room that the user has joined
           socket.to(room).emit('room message', {
@@ -85,6 +79,18 @@ export class UserPresenceService {
 
         } catch (error) {
           console.error('Error joining room:', error);
+        }
+      });
+
+      // Load more messages (pagination)
+      socket.on('load more', async (data: { room: string, offset: number }) => {
+        try {
+          const olderMessages = await this.messagesService.getMessageHistoryPaginated(
+            data.room, 100, data.offset
+          );
+          socket.emit('load more history', olderMessages);
+        } catch (error) {
+          console.error('Error loading more messages:', error);
         }
       });
 

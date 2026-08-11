@@ -1,4 +1,5 @@
 import { socket, messages, currentRoom as _currentRoom } from "./script.js"
+import { messageOffset, isLoadingMore, hasMoreMessages, startLoadingMore } from "./set-username.js"
 
 const roomList = document.getElementById('room-list')
 const newRoomInput = document.getElementById('new-room')
@@ -189,5 +190,12 @@ socket.on('user list update', (data) => {
             return `<strong>${user}</strong>`
         }).join(', ')
         userListElement.innerHTML = `Online: ${userList}`
+    }
+})
+
+// Infinite scroll: load more messages when scrolling to the top
+messages.addEventListener('scroll', () => {
+    if (messages.scrollTop < 50 && !isLoadingMore && hasMoreMessages && currentRoom) {
+        startLoadingMore(currentRoom, messageOffset)
     }
 })

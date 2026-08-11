@@ -26,4 +26,19 @@ export class MessagesService {
     );
     return result.rows;
   }
+
+  async getMessageHistoryPaginated(room: string, limit: number = 50, offset: number = 0) {
+    const result = await this.databaseService.query(
+      `SELECT * FROM (
+          SELECT username, message, created_at
+          FROM messages
+          WHERE room = $1
+          ORDER BY created_at DESC
+          LIMIT $2 OFFSET $3
+        ) AS recent_messages
+        ORDER BY created_at ASC;`,
+      [room, limit, offset]
+    );
+    return result.rows;
+  }
 }

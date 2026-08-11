@@ -1,7 +1,19 @@
 import { socket, messages } from "./script.js"
 
+// Track how many messages are loaded for pagination
+export let messageOffset = 0
+export let isLoadingMore = false
+export let hasMoreMessages = true
+
+export function startLoadingMore(room, offset) {
+    if (isLoadingMore || !hasMoreMessages) return
+    isLoadingMore = true
+    socket.emit('load more', { room, offset })
+}
+
 socket.on('chat message', (data) => {
     displayMessage(data)
+    messageOffset++
 })
 
 function displayMessage (data) {
@@ -14,6 +26,35 @@ function displayMessage (data) {
 socket.on('load history', (history) => {
     messages.innerHTML = ''
     history.forEach(msg => displayMessage(msg))
+    messageOffset = history.length
+    hasMoreMessages = history.length >= 100
+})
+
+socket.on('load more history', (olderMessages) => {
+    if (olderMessages.length === 0) {
+        hasMoreMessages = false
+        isLoadingMore = false
+        return
+    }
+
+    // Save current scroll position
+    const previousScrollHeight = messages.scrollHeight
+
+    // Prepend older messages at the top
+    const fragment = document.createDocumentFragment()
+    olderMessages.forEach(msg => {
+        const item = document.createElement('li')
+        item.innerHTML = `<strong>${msg.username}:</strong> ${msg.message}`
+        fragment.appendChild(item)
+    })
+    messages.insertBefore(fragment, messages.firstChild)
+
+    // Restore scroll position so the view doesn't jump
+    messages.scrollTop = messages.scrollHeight - previousScrollHeight
+
+    messageOffset += olderMessages.length
+    hasMoreMessages = olderMessages.length >= 100
+    isLoadingMore = false
 })
 
 socket.on('user left', (data) => {
