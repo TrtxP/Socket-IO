@@ -42,4 +42,8 @@ coverage/
 .npmrc
 .eslintcache
 
+# Claude AI files
 .claude
+
+# TypeScript build info
+tsconfig.build.tsbuildinfo
